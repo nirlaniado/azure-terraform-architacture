@@ -66,4 +66,28 @@ resource "azurerm_subnet_network_security_group_association" "app_assoc" {
   network_security_group_id = azurerm_network_security_group.app_nsg.id
 }
 
+resource "azurerm_network_security_group" "db_nsg" {
+  name                = "nsg-${var.project_name}-db"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  security_rule {
+    name                       = "Allow-PostgreSQL-From-App-Subnet"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "5432"
+    source_address_prefix      = var.app_subnet_cidr
+    destination_address_prefix = "*"
+  }
+
+}
+
+resource "azurerm_subnet_network_security_group_association" "db_assoc" {
+  subnet_id                 = azurerm_subnet.db_subnet.id
+  network_security_group_id = azurerm_network_security_group.db_nsg.id
+}
+
 
