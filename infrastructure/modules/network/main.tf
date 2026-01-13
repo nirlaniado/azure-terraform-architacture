@@ -1,19 +1,19 @@
 resource "azurerm_virtual_network" "vnet" {
-  name                = "vnet-${var.project_name}"
+  name                = "vnet-${var.project_name}-${var.location}"
   address_space       = [var.vnet_cidr]
   location            = var.location
   resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_subnet" "app_subnet" {
-  name                 = "snet-${var.project_name}-app"
+  name                 = "snet-${var.project_name}-${var.location}-app"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [var.app_subnet_cidr]
 }
 
 resource "azurerm_subnet" "db_subnet" {
-  name                 = "snet-${var.project_name}-db"
+  name                 = "snet-${var.project_name}-${var.location}-db"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [var.db_subnet_cidr]
@@ -32,7 +32,7 @@ resource "azurerm_subnet" "db_subnet" {
 
 
 resource "azurerm_network_security_group" "app_nsg" {
-  name                = "nsg-${var.project_name}-public"
+  name                = "nsg-${var.project_name}-${var.location}-public"
   location            = var.location
   resource_group_name = var.resource_group_name
 
@@ -67,7 +67,7 @@ resource "azurerm_subnet_network_security_group_association" "app_assoc" {
 }
 
 resource "azurerm_network_security_group" "db_nsg" {
-  name                = "nsg-${var.project_name}-db"
+  name                = "nsg-${var.project_name}-${var.location}-db"
   location            = var.location
   resource_group_name = var.resource_group_name
 

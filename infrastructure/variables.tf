@@ -10,7 +10,7 @@ variable "project_name" {
 }
 variable "location" {
   type    = string
-  default = "northeurope"
+  default = "uksouth"
 }
 
 variable "flask_ingress_cidr" {

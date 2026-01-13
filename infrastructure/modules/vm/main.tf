@@ -4,7 +4,7 @@ resource "tls_private_key" "ssh" {
 }
 
 resource "azurerm_public_ip" "pip" {
-  name                = "pip-${var.project_name}"
+  name                = "pip-${var.project_name}-${var.location}"
   location            = var.location
   resource_group_name = var.resource_group
   allocation_method   = "Static"
@@ -12,7 +12,7 @@ resource "azurerm_public_ip" "pip" {
 }
 
 resource "azurerm_network_interface" "nic" {
-  name                = "nic-${var.project_name}"
+  name                = "nic-${var.project_name}-${var.location}"
   location            = var.location
   resource_group_name = var.resource_group
 
@@ -25,7 +25,7 @@ resource "azurerm_network_interface" "nic" {
 }
 
 resource "azurerm_linux_virtual_machine" "vm_app" {
-  name                = "vm-app-${var.project_name}"
+  name                = "vm-app-${var.project_name}-${var.location}"
   location            = var.location
   resource_group_name = var.resource_group
   size                = var.vm_size
@@ -33,9 +33,9 @@ resource "azurerm_linux_virtual_machine" "vm_app" {
 
   network_interface_ids = [azurerm_network_interface.nic.id]
 
- admin_ssh_key {
+  admin_ssh_key {
     username   = var.vm_admin_username
-      public_key = tls_private_key.ssh.public_key_openssh
+    public_key = tls_private_key.ssh.public_key_openssh
   }
 
 

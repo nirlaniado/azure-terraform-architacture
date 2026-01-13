@@ -14,14 +14,14 @@ resource "azurerm_private_dns_zone" "pg" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "pg_link" {
-  name                  = "pg-dns-link-${var.project_name}"
+  name                  = "pg-dns-link-${var.project_name}-${var.location}"
   resource_group_name   = var.resource_group
   private_dns_zone_name = azurerm_private_dns_zone.pg.name
   virtual_network_id    = var.vnet_id
 }
 
 resource "azurerm_postgresql_flexible_server" "pg" {
-  name                = "pg-${var.project_name}"
+  name                = "pg-${var.project_name}-${var.location}"
   resource_group_name = var.resource_group
   location            = var.location
 
